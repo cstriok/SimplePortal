@@ -47,6 +47,35 @@ namespace SimplePortal.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public ActionResult EditUser(Guid uid)
+        {
+            User entity = _userRepository.FindRecord(uid);
+
+            if (entity != null)
+            {
+                ViewBag.UserRoleListItems = GetUserRoleListItems();
+                entity.Password = string.Empty;
+                return View(entity);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult EditUser(User entity)
+        {
+            if (entity != null)
+            {
+                User dbRecord = _userRepository.FindRecord(entity.Uid);
+                entity.Password = dbRecord.Password;
+                _userRepository.Update(entity);
+            }
+
+            ViewBag.UserRoleListItems = GetUserRoleListItems();
+            return RedirectToAction("Index");
+        }
+
         private List<SelectListItem> GetUserRoleListItems()
         {
             return new List<SelectListItem>

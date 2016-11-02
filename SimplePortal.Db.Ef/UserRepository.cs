@@ -44,11 +44,13 @@ namespace SimplePortal.Db.Ef
 
             if (userInDb != null)
             {
+                userInDb.FirstName = entity.FirstName;
                 userInDb.LastName = entity.LastName;
                 userInDb.Login = entity.Login;
                 userInDb.Mail = entity.Mail;
                 userInDb.Password = entity.Password;
                 userInDb.Role = entity.Role;
+                _dbContext.SaveChanges();
             }
         }
     }

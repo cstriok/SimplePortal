@@ -21,7 +21,7 @@ namespace SimplePortal.Db.Ef
             return entity.Id != 0 && !entity.Uid.Equals(Guid.Empty);
         }
         
-        protected T FindRecord(Guid uid)
+        public virtual T FindRecord(Guid uid)
         {
             return _dbContext.Set<T>().FirstOrDefault(e => e.Uid.Equals(uid));
         }
