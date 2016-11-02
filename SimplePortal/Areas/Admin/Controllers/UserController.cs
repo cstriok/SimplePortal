@@ -1,4 +1,5 @@
-﻿using SimplePortal.Db.Ef;
+﻿using SimplePortal.Areas.Admin.Models;
+using SimplePortal.Db.Ef;
 using SimplePortal.DomainModel.Entities;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,37 @@ namespace SimplePortal.Areas.Admin.Controllers
             }
 
             ViewBag.UserRoleListItems = GetUserRoleListItems();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult ChangePassword(Guid uid)
+        {
+            User dbRecord = _userRepository.FindRecord(uid);
+            if (dbRecord != null)
+            {
+                ChangePasswordViewModel model = new ChangePasswordViewModel
+                {
+                    Uid = dbRecord.Uid
+                };
+
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            User dbRecord = _userRepository.FindRecord(model.Uid);
+            if (dbRecord != null)
+            {
+                dbRecord.Password = model.NewPassword;
+                dbRecord.HashPassword();
+                _userRepository.Update(dbRecord);
+            }
+
             return RedirectToAction("Index");
         }
 

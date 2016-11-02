@@ -12,9 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePortal.Db.Ef", "SimplePortal.Db.Ef\SimplePortal.Db.Ef.csproj", "{21D99611-0D94-4770-9F56-335949D3C553}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DbScripts", "DbScripts", "{5493E519-68B0-43B7-AE98-A85B23E4EA0A}"
-	ProjectSection(SolutionItems) = preProject
-		DBScripts\CreateTableUser.sql = DBScripts\CreateTableUser.sql
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
