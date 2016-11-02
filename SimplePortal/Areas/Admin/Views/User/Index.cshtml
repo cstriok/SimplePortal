@@ -1,0 +1,21 @@
+﻿@model IEnumerable<SimplePortal.DomainModel.Entities.User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Users</h2>
+
+@foreach (var item in Model)
+{
+    @item.Id <br />
+    @item.Uid <br />
+    @item.Login <br />
+    @item.Password <br />
+
+    <br />
+}
+
+@Html.ActionLink("Create new user", "CreateUser")
+
