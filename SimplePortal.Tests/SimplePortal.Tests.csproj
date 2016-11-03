@@ -36,6 +36,7 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -84,10 +85,18 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SimplePortal.Db.Ef\SimplePortal.Db.Ef.csproj">
+      <Project>{21d99611-0d94-4770-9f56-335949d3c553}</Project>
+      <Name>SimplePortal.Db.Ef</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimplePortal.DomainModel\SimplePortal.DomainModel.csproj">
+      <Project>{d40dc1ad-7d06-494c-bcdd-38babec1922a}</Project>
+      <Name>SimplePortal.DomainModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimplePortal\SimplePortal.csproj">
       <Project>{D847B46C-E9E1-4A5C-9DF4-EE4010C24197}</Project>
       <Name>SimplePortal</Name>

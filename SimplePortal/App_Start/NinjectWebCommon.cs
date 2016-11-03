@@ -62,7 +62,7 @@ namespace SimplePortal.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IEfRepository<User>>().To<UserRepository>();
+            kernel.Bind<IEfRepository<User>>().To<UserRepository>().WithConstructorArgument("context", new SimplePortalEfDbContext());
         }        
     }
 }

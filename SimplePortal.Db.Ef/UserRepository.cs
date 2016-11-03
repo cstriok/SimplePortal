@@ -9,6 +9,12 @@ namespace SimplePortal.Db.Ef
 {
     public class UserRepository : RepositoryBase<User>, IEfRepository<User>
     {
+        public UserRepository(ISimplePortalEfDbContext context)
+            : base(context)
+        {
+
+        }
+
         public List<User> Items
         {
             get
@@ -17,6 +23,10 @@ namespace SimplePortal.Db.Ef
             }
         }
 
+        /// <summary>
+        /// throws RecrodNotNewException if record has id != 0 or uid != guid.empty
+        /// </summary>
+        /// <param name="entity">new record</param>
         public void Create(User entity)
         {
             if (!RecordHasIdAndUid(entity))
@@ -25,8 +35,16 @@ namespace SimplePortal.Db.Ef
                 _dbContext.Users.Add(entity);
                 _dbContext.SaveChanges();
             }
+            else
+            {
+                throw new RecordNotNewException();
+            }
         }
 
+        /// <summary>
+        /// throws RecordNotFoundInDbException if record with uid does not exist in db
+        /// </summary>
+        /// <param name="entity">existing record</param>
         public void Delete(User entity)
         {
             User userInDb = FindRecord(entity.Uid);
@@ -36,8 +54,17 @@ namespace SimplePortal.Db.Ef
                 _dbContext.Users.Remove(userInDb);
                 _dbContext.SaveChanges();
             }
+            else
+            {
+                throw new RecordNotFoundInDbException();
+            }
+
         }
 
+        /// <summary>
+        /// throws RecordNotFoundInDbException if record with uid does not exist in db
+        /// </summary>
+        /// <param name="entity">existing record</param>
         public void Update(User entity)
         {
             User userInDb = FindRecord(entity.Uid);
@@ -51,6 +78,10 @@ namespace SimplePortal.Db.Ef
                 userInDb.Password = entity.Password;
                 userInDb.Role = entity.Role;
                 _dbContext.SaveChanges();
+            }
+            else
+            {
+                throw new RecordNotFoundInDbException();
             }
         }
     }

@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace SimplePortal.Db.Ef
 {
-    public class SimplePortalEfDbContext : DbContext
+    public class SimplePortalEfDbContext : DbContext, ISimplePortalEfDbContext
     {
         public DbSet<User> Users { get; set; }
+
     }
 }
