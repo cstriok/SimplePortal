@@ -62,7 +62,14 @@ namespace SimplePortal.Areas.Admin.Controllers
 
                 entity.Password = _passwordHasher.HashedPassword;
                 
-                _userRepository.Create(entity);
+                try
+                {
+                    _userRepository.Create(entity);
+                }
+                catch (RecordNotNewException)
+                {
+                    RedirectToAction("ShowError", "ErrorHandler", new { errorMessage = "Record already exists in DB" });
+                }
             }
 
             return RedirectToAction("Index");
@@ -101,7 +108,15 @@ namespace SimplePortal.Areas.Admin.Controllers
             {
                 User dbRecord = _userRepository.FindRecord(entity.Uid);
                 entity.Password = dbRecord.Password;
-                _userRepository.Update(entity);
+
+                try
+                {
+                    _userRepository.Update(entity);
+                }
+                catch(RecordNotFoundInDbException)
+                {
+                    RedirectToAction("ShowError", "ErrorHandler", new { errorMessage = "Record does not exist in DB" });
+                }
             }
 
             ViewBag.UserRoleListItems = GetUserRoleListItems();
@@ -136,7 +151,15 @@ namespace SimplePortal.Areas.Admin.Controllers
                     _passwordHasher.ClearTextPassword = model.NewPassword;
                     dbRecord.Password = _passwordHasher.HashedPassword;
 
-                    _userRepository.Update(dbRecord);
+                    try
+                    {
+                        _userRepository.Update(dbRecord);
+                    }
+                    catch (RecordNotFoundInDbException)
+                    {
+                        RedirectToAction("ShowError", "ErrorHandler", new { errorMessage = "Record does not exist in DB" });
+                    }
+                    
                 }
                 else
                 {
