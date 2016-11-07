@@ -183,7 +183,124 @@ namespace SimplePortal.Tests
             repository.Delete(user);
         }
 
-        // TODO: Test Update
+        [TestMethod]
+        public void Update_Existing_User_Should_Succeed()
+        {
+            // Arrange 
+            User user = new User
+            {
+                Id = 2,
+                Uid = new Guid("57D963D7-ABFC-4DD6-89A6-93A7D15B8FC8"),
+                FirstName = "FirstName",
+                LastName = "LastName",
+                Login = "Login",
+                Password = "Password",
+                Mail = "test@example.org",
+                Role = UserRole.Admin
+            };
+
+            Mock<DbSet<User>> userDbSetMock = GetQueryableMockDbSet(
+                new List<User> { user });
+
+            Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
+
+            moq.Setup(m => m.Users).Returns(userDbSetMock.Object);
+            moq.Setup(m => m.Set<User>()).Returns(userDbSetMock.Object);
+
+            UserRepository repository = new UserRepository(moq.Object);
+
+            // Act
+            repository.Update(user);
+            
+            moq.Verify(m => m.SaveChanges());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(RecordNotFoundInDbException))]
+        public void Update_NotExisting_User_Should_Fail()
+        {
+            // Arrange 
+            User user = new User
+            {
+                Id = 2,
+                Uid = new Guid("57D963D7-ABFC-4DD6-89A6-93A7D15B8FC8"),
+                FirstName = "FirstName",
+                LastName = "LastName",
+                Login = "Login",
+                Password = "Password",
+                Mail = "test@example.org",
+                Role = UserRole.Admin
+            };
+
+            Mock<DbSet<User>> userDbSetMock = GetQueryableMockDbSet(
+                new List<User>());
+
+            Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
+
+            moq.Setup(m => m.Users).Returns(userDbSetMock.Object);
+            moq.Setup(m => m.Set<User>()).Returns(userDbSetMock.Object);
+
+            UserRepository repository = new UserRepository(moq.Object);
+
+            // Act
+            repository.Update(user);
+            
+        }
+
+        [TestMethod]
+        public void Update_Existing_User_All_Attributes_Should_Succeed()
+        {
+            // Arrange 
+            User userInDb = new User
+            {
+                Id = 2,
+                Uid = new Guid("57D963D7-ABFC-4DD6-89A6-93A7D15B8FC8"),
+                FirstName = "FirstName",
+                LastName = "LastName",
+                Login = "Login",
+                Password = "Password",
+                Mail = "test@example.org",
+                Role = UserRole.Admin
+            };
+
+            Mock<DbSet<User>> userDbSetMock = GetQueryableMockDbSet(
+                new List<User> { userInDb });
+
+            Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
+
+            moq.Setup(m => m.Users).Returns(userDbSetMock.Object);
+            moq.Setup(m => m.Set<User>()).Returns(userDbSetMock.Object);
+
+            UserRepository repository = new UserRepository(moq.Object);
+
+            User userToUpdate = new User
+            {
+                Id = 2,
+                Uid = new Guid("57D963D7-ABFC-4DD6-89A6-93A7D15B8FC8"),
+                FirstName = "FirstNameNew",
+                LastName = "LastNameNew",
+                Login = "LoginNew",
+                Password = "PasswordNew",
+                Mail = "test@example.orgnew",
+                Role = UserRole.Reader
+            };
+
+            // Act
+            repository.Update(userToUpdate);
+
+            moq.Verify(m => m.SaveChanges());
+
+            User updatedUserInDb = repository.FindRecord(userToUpdate.Uid);
+
+            Assert.IsNotNull(updatedUserInDb);
+
+            Assert.AreEqual(userToUpdate.FirstName, updatedUserInDb.FirstName);
+            Assert.AreEqual(userToUpdate.LastName, updatedUserInDb.LastName);
+            Assert.AreEqual(userToUpdate.Login, updatedUserInDb.Login);
+            Assert.AreEqual(userToUpdate.Password, updatedUserInDb.Password);
+            Assert.AreEqual(userToUpdate.Mail, updatedUserInDb.Mail);
+            Assert.AreEqual(userToUpdate.Role, updatedUserInDb.Role);
+        }
 
         private static Mock<DbSet<T>> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
         {
