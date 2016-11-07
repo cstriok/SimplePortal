@@ -10,7 +10,7 @@ namespace SimplePortal.Db.Ef
 {
     public class SimplePortalEfDbContext : DbContext, ISimplePortalEfDbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
 
     }
 }

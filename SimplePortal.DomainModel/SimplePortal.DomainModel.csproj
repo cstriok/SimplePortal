@@ -40,7 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crypto\IPasswordChecker.cs" />
+    <Compile Include="Crypto\IPasswordHasher.cs" />
+    <Compile Include="Crypto\PasswordChecker.cs" />
     <Compile Include="Crypto\RNGCryptoServiceProviderPasswordManager.cs" />
+    <Compile Include="Crypto\PasswordHasher.cs" />
     <Compile Include="Entities\Article.cs" />
     <Compile Include="Entities\Author.cs" />
     <Compile Include="Entities\EntityBase.cs" />

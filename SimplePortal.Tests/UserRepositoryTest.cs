@@ -30,7 +30,7 @@ namespace SimplePortal.Tests
 
             Mock<DbSet<User>> dbSetMoq = new Mock<DbSet<User>>();
             Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
-            moq.Setup(m => m.Users).Returns(dbSetMoq.Object);
+            moq.Setup(m => m.User).Returns(dbSetMoq.Object);
 
             UserRepository repository = new UserRepository(moq.Object);
 
@@ -140,7 +140,7 @@ namespace SimplePortal.Tests
 
             Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
             
-            moq.Setup(m => m.Users).Returns(userDbSetMock.Object);
+            moq.Setup(m => m.User).Returns(userDbSetMock.Object);
             moq.Setup(m => m.Set<User>()).Returns(userDbSetMock.Object);
 
             UserRepository repository = new UserRepository(moq.Object);
@@ -174,7 +174,7 @@ namespace SimplePortal.Tests
 
             Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
 
-            moq.Setup(m => m.Users).Returns(userDbSetMock.Object);
+            moq.Setup(m => m.User).Returns(userDbSetMock.Object);
             moq.Setup(m => m.Set<User>()).Returns(userDbSetMock.Object);
 
             UserRepository repository = new UserRepository(moq.Object);
@@ -204,7 +204,7 @@ namespace SimplePortal.Tests
 
             Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
 
-            moq.Setup(m => m.Users).Returns(userDbSetMock.Object);
+            moq.Setup(m => m.User).Returns(userDbSetMock.Object);
             moq.Setup(m => m.Set<User>()).Returns(userDbSetMock.Object);
 
             UserRepository repository = new UserRepository(moq.Object);
@@ -237,7 +237,7 @@ namespace SimplePortal.Tests
 
             Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
 
-            moq.Setup(m => m.Users).Returns(userDbSetMock.Object);
+            moq.Setup(m => m.User).Returns(userDbSetMock.Object);
             moq.Setup(m => m.Set<User>()).Returns(userDbSetMock.Object);
 
             UserRepository repository = new UserRepository(moq.Object);
@@ -268,7 +268,7 @@ namespace SimplePortal.Tests
 
             Mock<ISimplePortalEfDbContext> moq = new Mock<ISimplePortalEfDbContext>();
 
-            moq.Setup(m => m.Users).Returns(userDbSetMock.Object);
+            moq.Setup(m => m.User).Returns(userDbSetMock.Object);
             moq.Setup(m => m.Set<User>()).Returns(userDbSetMock.Object);
 
             UserRepository repository = new UserRepository(moq.Object);

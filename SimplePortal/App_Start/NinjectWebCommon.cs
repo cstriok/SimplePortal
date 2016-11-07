@@ -1,3 +1,5 @@
+using SimplePortal.DomainModel.Crypto;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(SimplePortal.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(SimplePortal.App_Start.NinjectWebCommon), "Stop")]
 
@@ -63,6 +65,8 @@ namespace SimplePortal.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IEfRepository<User>>().To<UserRepository>().WithConstructorArgument("context", new SimplePortalEfDbContext());
+            kernel.Bind<IPasswordHasher>().To<PasswordHasher>();
+            kernel.Bind<IPasswordChecker>().To<PasswordChecker>();
         }        
     }
 }

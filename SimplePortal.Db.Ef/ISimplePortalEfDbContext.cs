@@ -14,7 +14,7 @@ namespace SimplePortal.Db.Ef
     public interface ISimplePortalEfDbContext : IDisposable
     {
         // db tables 
-        DbSet<User> Users { get; set; }
+        DbSet<User> User { get; set; }
         
         // must re-reference db context mehthods
         DbChangeTracker ChangeTracker { get; }

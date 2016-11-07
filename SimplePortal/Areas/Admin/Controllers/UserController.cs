@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SimplePortal.DomainModel.Crypto;
 
 namespace SimplePortal.Areas.Admin.Controllers
 {
@@ -13,14 +14,30 @@ namespace SimplePortal.Areas.Admin.Controllers
     {
         private readonly IEfRepository<User> _userRepository = null;
 
-        public UserController(IEfRepository<User> userRepository)
+        private readonly IPasswordHasher _passwordHasher = null;
+
+        private readonly IPasswordChecker _passwordChecker = null;
+
+        public UserController(IEfRepository<User> userRepository, IPasswordHasher passwordHasher, IPasswordChecker passwordChecker)
         {
             if (userRepository == null)
             {
                 throw new ArgumentNullException(nameof(userRepository));
             }
 
+            if (passwordHasher == null)
+            {
+                throw new ArgumentNullException(nameof(passwordHasher));
+            }
+
+            if (passwordChecker == null)
+            {
+                throw new ArgumentNullException(nameof(passwordChecker));
+            }
+
             _userRepository = userRepository;
+            _passwordHasher = passwordHasher;
+            _passwordChecker = passwordChecker;
         }
         
 
@@ -41,7 +58,10 @@ namespace SimplePortal.Areas.Admin.Controllers
         {
             if (entity != null)
             {
-                entity.HashPassword();
+                _passwordHasher.ClearTextPassword = entity.Password;
+
+                entity.Password = _passwordHasher.HashedPassword;
+                
                 _userRepository.Create(entity);
             }
 
@@ -51,13 +71,24 @@ namespace SimplePortal.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult EditUser(Guid uid)
         {
-            User entity = _userRepository.FindRecord(uid);
+            User dbRecord = _userRepository.FindRecord(uid);
 
-            if (entity != null)
+            if (dbRecord != null)
             {
+                User userToEdit = new User
+                {
+                    Password = null,
+                    Role = dbRecord.Role,
+                    Login = dbRecord.Login,
+                    LastName = dbRecord.LastName,
+                    Mail = dbRecord.Mail,
+                    FirstName = dbRecord.FirstName,
+                    Uid = dbRecord.Uid,
+                    Id = dbRecord.Id
+                };
+
                 ViewBag.UserRoleListItems = GetUserRoleListItems();
-                entity.Password = string.Empty;
-                return View(entity);
+                return View(userToEdit);
             }
 
             return RedirectToAction("Index");
@@ -100,12 +131,39 @@ namespace SimplePortal.Areas.Admin.Controllers
             User dbRecord = _userRepository.FindRecord(model.Uid);
             if (dbRecord != null)
             {
-                dbRecord.Password = model.NewPassword;
-                dbRecord.HashPassword();
-                _userRepository.Update(dbRecord);
+                if (CheckPasswordsAreEqual(dbRecord.Password, model.OldPassword))
+                {
+                    _passwordHasher.ClearTextPassword = model.NewPassword;
+                    dbRecord.Password = _passwordHasher.HashedPassword;
+
+                    _userRepository.Update(dbRecord);
+                }
+                else
+                {
+                    return RedirectToAction("ChangePassword", new {uid = model.Uid});
+                }
             }
 
             return RedirectToAction("Index");
+        }
+
+        private bool CheckPasswordsAreEqual(string passwordHash, string passwordClearText)
+        {
+            if (!string.IsNullOrEmpty(passwordHash) &&
+                !string.IsNullOrEmpty(passwordClearText))
+            {
+                _passwordChecker.ClearTextPassword = passwordClearText;
+                _passwordChecker.HashedPassword = passwordHash;
+                return _passwordChecker.PasswordCheckOk;
+            }
+
+            if (string.IsNullOrEmpty(passwordHash) && 
+                string.IsNullOrEmpty(passwordClearText))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private List<SelectListItem> GetUserRoleListItems()

@@ -19,7 +19,7 @@ namespace SimplePortal.Db.Ef
         {
             get
             {
-                return new List<User>(_dbContext.Users);
+                return new List<User>(_dbContext.User);
             }
         }
 
@@ -32,7 +32,7 @@ namespace SimplePortal.Db.Ef
             if (!RecordHasIdAndUid(entity))
             {
                 entity.Uid = Guid.NewGuid();
-                _dbContext.Users.Add(entity);
+                _dbContext.User.Add(entity);
                 _dbContext.SaveChanges();
             }
             else
@@ -51,7 +51,7 @@ namespace SimplePortal.Db.Ef
             
             if (userInDb != null)
             {
-                _dbContext.Users.Remove(userInDb);
+                _dbContext.User.Remove(userInDb);
                 _dbContext.SaveChanges();
             }
             else

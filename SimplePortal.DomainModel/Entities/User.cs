@@ -14,16 +14,5 @@ namespace SimplePortal.DomainModel.Entities
         public string Password { get; set; }
         public string Mail { get; set; }
         public UserRole Role { get; set; }
-
-        public void HashPassword()
-        {
-            string hash = Crypto.RNGCryptoServiceProviderPasswordManager.CreateHash(Password);
-            Password = hash;
-        }
-
-        public bool CheckPassword(string clearTextPassword)
-        {
-            return Crypto.RNGCryptoServiceProviderPasswordManager.VerifyPassword(clearTextPassword, Password);
-        }
     }
 }
